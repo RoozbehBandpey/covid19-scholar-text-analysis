@@ -1,0 +1,800 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vulnerabilityAssessments_Default_storageContainerPath": {
+            "type": "SecureString"
+        },
+        "servers_synapse_analytics_sqls_name": {
+            "defaultValue": "synapse-analytics-sqls",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Sql/servers",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[parameters('servers_synapse_analytics_sqls_name')]",
+            "location": "westeurope",
+            "kind": "v12.0",
+            "properties": {
+                "administratorLogin": "sqladmin",
+                "version": "12.0",
+                "publicNetworkAccess": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/CreateIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/DbParameterization')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/DefragmentIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/DropIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/ForceLastGoodPlan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/Default')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/auditingSettings",
+            "apiVersion": "2017-03-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "retentionDays": 0,
+                "auditActionsAndGroups": [],
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000",
+                "isStorageSecondaryKeyInUse": false,
+                "isAzureMonitorTargetEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "sku": {
+                "name": "DataWarehouse",
+                "tier": "DataWarehouse",
+                "capacity": 900
+            },
+            "kind": "v12.0,user,datawarehouse,gen2",
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": 263882790666240,
+                "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+                "readScale": "Disabled",
+                "readReplicaCount": 0,
+                "storageAccountType": "GRS"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/master/Default')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingSettings",
+            "apiVersion": "2017-03-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "retentionDays": 0,
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000",
+                "isStorageSecondaryKeyInUse": false,
+                "isAzureMonitorTargetEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/extendedAuditingSettings",
+            "apiVersion": "2017-03-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "retentionDays": 0,
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000",
+                "isStorageSecondaryKeyInUse": false,
+                "isAzureMonitorTargetEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/geoBackupPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/master/Default')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+            "apiVersion": "2018-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/master/current')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "status": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/vulnerabilityAssessments",
+            "apiVersion": "2017-03-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/encryptionProtector",
+            "apiVersion": "2015-05-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "kind": "servicemanaged",
+            "properties": {
+                "serverKeyName": "ServiceManaged",
+                "serverKeyType": "ServiceManaged"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/extendedAuditingSettings",
+            "apiVersion": "2017-03-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "retentionDays": 0,
+                "auditActionsAndGroups": [],
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000",
+                "isStorageSecondaryKeyInUse": false,
+                "isAzureMonitorTargetEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/firewallRules",
+            "apiVersion": "2015-05-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/AllowAllWindowsAzureIps')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "0.0.0.0"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/keys",
+            "apiVersion": "2015-05-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/ServiceManaged')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "kind": "servicemanaged",
+            "properties": {
+                "serverKeyType": "ServiceManaged"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/securityAlertPolicies",
+            "apiVersion": "2017-03-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/vulnerabilityAssessments",
+            "apiVersion": "2018-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                },
+                "storageContainerPath": "[parameters('vulnerabilityAssessments_Default_storageContainerPath')]"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/Default')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingSettings",
+            "apiVersion": "2017-03-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "retentionDays": 0,
+                "auditActionsAndGroups": [],
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000",
+                "isStorageSecondaryKeyInUse": false,
+                "isAzureMonitorTargetEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/extendedAuditingSettings",
+            "apiVersion": "2017-03-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "retentionDays": 0,
+                "auditActionsAndGroups": [],
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000",
+                "isStorageSecondaryKeyInUse": false,
+                "isAzureMonitorTargetEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/geoBackupPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/Default')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+            "apiVersion": "2018-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/current')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "status": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/vulnerabilityAssessments",
+            "apiVersion": "2017-03-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/largerc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 22,
+                "maxResourcePercentPerRequest": 22,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/mediumrc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 10,
+                "maxResourcePercentPerRequest": 10,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/smallrc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 3,
+                "maxResourcePercentPerRequest": 3,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/staticrc10')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 0.4,
+                "maxResourcePercentPerRequest": 0.4,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/staticrc20')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 0.8,
+                "maxResourcePercentPerRequest": 0.8,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/staticrc30')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 1.6,
+                "maxResourcePercentPerRequest": 1.6,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/staticrc40')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 3.2,
+                "maxResourcePercentPerRequest": 3.2,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/staticrc50')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 6.4,
+                "maxResourcePercentPerRequest": 6.4,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/staticrc60')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 12.8,
+                "maxResourcePercentPerRequest": 12.8,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/staticrc70')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 25.6,
+                "maxResourcePercentPerRequest": 25.6,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/staticrc80')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 51.2,
+                "maxResourcePercentPerRequest": 51.2,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/xlargerc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 70,
+                "maxResourcePercentPerRequest": 70,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/largerc/largerc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp', 'largerc')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "memberName": "largerc",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/mediumrc/mediumrc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp', 'mediumrc')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "memberName": "mediumrc",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/smallrc/smallrc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp', 'smallrc')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "memberName": "smallrc",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/staticrc10/staticrc10')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp', 'staticrc10')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "memberName": "staticrc10",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/staticrc20/staticrc20')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp', 'staticrc20')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "memberName": "staticrc20",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/staticrc30/staticrc30')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp', 'staticrc30')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "memberName": "staticrc30",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/staticrc40/staticrc40')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp', 'staticrc40')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "memberName": "staticrc40",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/staticrc50/staticrc50')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp', 'staticrc50')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "memberName": "staticrc50",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/staticrc60/staticrc60')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp', 'staticrc60')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "memberName": "staticrc60",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/staticrc70/staticrc70')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp', 'staticrc70')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "memberName": "staticrc70",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/staticrc80/staticrc80')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp', 'staticrc80')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "memberName": "staticrc80",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[concat(parameters('servers_synapse_analytics_sqls_name'), '/synapse-analytics-sqlp/xlargerc/xlargerc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp', 'xlargerc')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_synapse_analytics_sqls_name'), 'synapse-analytics-sqlp')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_synapse_analytics_sqls_name'))]"
+            ],
+            "properties": {
+                "memberName": "xlargerc",
+                "importance": "normal"
+            }
+        }
+    ]
+}

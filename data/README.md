@@ -1,0 +1,1 @@
+The data consist of 20k scholarly article about COVID-19

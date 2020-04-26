@@ -8,7 +8,7 @@ The analytic tool that is used is [Microsoft Azure Synapse](https://docs.microso
 ## Data
 CORD-19 is a huge body of scientific papers over COVID-19 virus
 is located in ./data/CORD-19-research-challenge folder but ignored due to massive size, download data from the link above and place it in the directory and then run the script to load it
-Read more on [README](data/README.me)
+Read more on [README](data/README.md)
 ## Tools and Requirements
 
 ### Why Azure Synapse?

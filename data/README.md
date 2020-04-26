@@ -14,4 +14,6 @@ We have 2278 item in json format
 \CORD-19-research-challenge\noncomm_use_subset\noncomm_use_subset\pmc_json 2258
 
 
+Articles are in json format which is great, 
 
+Run load to get basic insight over data

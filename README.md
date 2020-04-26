@@ -7,6 +7,7 @@ The analytic tool that is used is [Microsoft Azure Synapse](https://docs.microso
 
 ## Data
 CORD-19 is a huge body of scientific papers over COVID-19 virus
+is located in ./data/CORD-19-research-challenge folder but ignored due to massive size, download data from the link above and place it in the directory and then run the script to load it
 ## Tools and Requirements
 
 ### Why Azure Synapse?
@@ -16,3 +17,6 @@ Azure Synapse is an analytics service that brings together enterprise data wareh
 
 
 
+SQL pool represents a collection of analytic resources that are being provisioned when using Synapse SQL. The size of SQL pool is determined by Data Warehousing Units (DWU).
+
+When the data is ready for complex analysis, Synapse SQL pool uses PolyBase to query the big data stores. PolyBase uses standard T-SQL queries to bring the data into Synapse SQL pool tables.

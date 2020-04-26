@@ -1,0 +1,35 @@
+name: sql_firewall_homeoffice
+
+trigger:
+  branches:
+    include:
+      - RoozbehBAndpey/homeoffice-ips
+  paths:
+    include:
+      - tmp/sql_firewall_template.yaml
+      - tmp/sql_firewall.ado.yaml
+
+stages:
+- stage: dev
+  jobs:
+  - template: sql_firewall_template.yaml
+    parameters:
+      environmentVariables: synapse-analytics
+      serviceConnection: synapse-analytics-infrastructure-dev
+      environment: dev
+
+# - stage: int
+#   jobs:
+#   - template: sql_firewall_template.yaml
+#     parameters:
+#       environmentVariables: synapse-analytics
+#       serviceConnection: synapse-analytics-infrastructure-int
+#       environment: int
+
+# - stage: prod
+#   jobs:
+#   - template: sql_firewall_template.yaml
+#     parameters:
+#       environmentVariables: synapse-analytics
+#       serviceConnection: synapse-analytics-infrastructure-prd
+#       environment: prd

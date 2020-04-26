@@ -17,3 +17,5 @@ We have 2278 item in json format
 Articles are in json format which is great, 
 
 Run load to get basic insight over data
+TODO: get more insight over data structure with regex
+

@@ -12,7 +12,7 @@ CORD-19 is a huge body of scientific papers over COVID-19 virus
 ### Why Azure Synapse?
 Azure Synapse is an analytics service that brings together enterprise data warehousing and Big Data analytics. Although using Synapse for purpose of exploring CORD-19 dataset might sound like an overkill because Synapse is initially designed to handel data and concurrent queries on way more heavier workloads, but it has also significant capabilities to ingest, prepare, manage, and serve data for immediate BI and machine learning needs. Since Azure Synapse is new in market, the main purpose of using it is experimental.
 
-Learn more [here](https://www.youtube.com/watch?v=xzxjpQSvDEA)
+[Real power of Azure Synapse](https://www.youtube.com/watch?v=xzxjpQSvDEA)
 
 
 

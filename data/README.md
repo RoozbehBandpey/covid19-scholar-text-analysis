@@ -1,3 +1,6 @@
+Download the CORD-19 data from [here](https://www.kaggle.com/allen-institute-for-ai/CORD-19-research-challenge) after unpacking place it in this directory
+
+
 The data consist of 57k scholarly article about COVID-19
 
 There so much new information that is being pushed fast, and that makes it super difficult for the researchers to get insight over the true behavior of the virus. There are so much variability about many aspect of the virus that makes us think about it mysteriously. It turns out NLP and big data technologies can provide a great help in this are.

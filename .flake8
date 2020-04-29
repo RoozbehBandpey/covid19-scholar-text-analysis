@@ -15,4 +15,12 @@
 # E231: missing white space after "," --> black generates autoformat [,] which fails flake8
 ignore = E203, E266, W503, F403, F405, E402, E731, F821, E722, E231
 
-max-line-length = 88
+max-line-length = 120
+
+exclude =
+    # No need to traverse our git directory
+    .git,
+    # There's no value in checking cache directories
+    __pycache__,
+    # No need to traverse virtual environment
+    venv,

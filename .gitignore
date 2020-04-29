@@ -130,3 +130,7 @@ dmypy.json
 
 
 CORD-19-research-challenge/
+
+
+#IDEs
+.vscode

@@ -26,3 +26,7 @@ TODO: get more insight over data structure with regex
 
 
 The loader.py parses the data and loads it into sql database for further training and usage
+
+
+In an era of transfer learning, transformers, and deep architectures, we believe that pretrained models provide a unified solution to many real-world problems and allow handling different tasks and languages easily.
+

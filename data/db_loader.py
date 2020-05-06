@@ -1,7 +1,10 @@
 import os
 import sys
+import json
 import urllib
 import pandas as pd
+from pathlib import Path
+from pprint import pprint
 from sqlalchemy import Integer, String
 from sqlalchemy import create_engine
 from sqlalchemy import MetaData
@@ -51,7 +54,18 @@ class DBHandler():
 			df.drop(['Unnamed: 0'], axis=1, inplace=True)
 			file_name = df.iloc[0]['file_names']
 			relative_path = df.iloc[0]['relative_paths']
-			print(file_name, relative_path)
+			file_name = Path(file_name)
+			relative_path = Path(relative_path)
+			self.DATA_DIR = Path(self.DATA_DIR)
+			print(relative_path, file_name)
+			print(self.DATA_DIR)
+			print(os.path.join(self.DATA_DIR, relative_path, file_name))
+			# json_file = self.DATA_DIR + '/' + relative_path + '/' + file_name
+			# j = json.load(open(json_file, 'rb'))
+			# pprint(j)
+			# file_path = os.path.join(relative_path, file_name)
+			# print(os.path.join(self.DATA_DIR, file_path))
+
 		else:
 			print("[ERROR] Index file does not exist!")
 

@@ -134,7 +134,6 @@ CORD-19-research-challenge/
 
 #IDEs
 .vscode
-
-
 #Local settings
 local.settings.json
+.python_packages

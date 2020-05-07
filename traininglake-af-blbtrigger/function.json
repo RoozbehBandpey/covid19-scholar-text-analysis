@@ -1,0 +1,12 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "name": "myblob",
+      "type": "blobTrigger",
+      "direction": "in",
+      "path": "training-lake-container/CORD19",
+      "connection": "mlexperiments2806134080_STORAGE"
+    }
+  ]
+}

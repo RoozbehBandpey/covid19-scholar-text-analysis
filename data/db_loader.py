@@ -76,40 +76,53 @@ class DBHandler():
 		"""Returns title from paper metadata"""
 		return paper_meta['title']
 
-	def _get_abs_text(self, abstract_meta):
-		"""Returns abstract text from paper abstract metadata"""
-		abstract_text = ''
-		for text in abstract_meta:
-			abstract_text += text['text']+'\n\n'
+	def _get_text(self, text_meta):
+		"""Returns text from paper text/abstract text metadata list"""
+		full_text = ''
+		for text in text_meta:
+			full_text += text['text']+'\n\n'
 		
-		if abstract_text[-1] == '\n':
-			abstract_text = abstract_text[:-2]
+		if full_text[-1] == '\n':
+			full_text = full_text[:-2]
 
-		return abstract_text
+		return full_text
 
 
 	def load_data_as_df(self, index_file_name):
 		if os.path.exists(os.path.join(self.DATA_DIR, index_file_name)):
 			df = pd.read_csv(os.path.join(self.DATA_DIR, index_file_name))
 			df.drop(['Unnamed: 0'], axis=1, inplace=True)
-			file_name = df.iloc[0]['file_names']
-			relative_path = df.iloc[0]['relative_paths']
-			if relative_path[0] == '\\':
-				relative_path = relative_path[1:]
-			json_file =os.path.join(self.DATASET_DIR, relative_path, file_name)
-			print(f'Reading file -> {json_file}')
-			if os.path.exists(json_file):
-				paper = json.load(open(json_file, 'rb'))
+			print(df.shape)
+			for i in range(df.shape[0]):
+				file_name = df.iloc[i]['file_names']
+				relative_path = df.iloc[i]['relative_paths']
+				if relative_path[0] == '\\':
+					relative_path = relative_path[1:]
+					json_file = os.path.join(self.DATASET_DIR, relative_path, file_name)
+					print(f'Reading file -> {json_file}')
+					if os.path.exists(json_file):
+						print("\t\t\tExist!")
+
+			# file_name = df.iloc[0]['file_names']
+			# relative_path = df.iloc[0]['relative_paths']
+			# if relative_path[0] == '\\':
+			# 	relative_path = relative_path[1:]
+			# json_file =os.path.join(self.DATASET_DIR, relative_path, file_name)
+			# print(f'Reading file -> {json_file}')
+			# if os.path.exists(json_file):
+			# 	paper = json.load(open(json_file, 'rb'))
 				
-				title = self._get_title(paper['metadata'])
-				print(title)
-				authors = self._get_authors(paper['metadata'])
-				print(authors)
-				abstract_text = self._get_abs_text(paper['abstract'])
-				print(abstract_text)
-				# pprint(j.keys())
-			else:
-				print("[ERROR] requested file does not exist!")
+			# 	title = self._get_title(paper['metadata'])
+			# 	print(title)
+			# 	authors = self._get_authors(paper['metadata'])
+			# 	print(authors)
+			# 	abstract_text = self._get_text(paper['abstract'])
+			# 	print(abstract_text)
+			# 	body_text = self._get_text(paper['body_text'])
+			# 	print(body_text)
+			# 	# pprint(j.keys())
+			# else:
+			# 	print("[ERROR] requested file does not exist!")
 
 		else:
 			print("[ERROR] Index file does not exist!")

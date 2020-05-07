@@ -98,10 +98,13 @@ class DBHandler():
 				relative_path = df.iloc[i]['relative_paths']
 				if relative_path[0] == '\\':
 					relative_path = relative_path[1:]
-					json_file = os.path.join(self.DATASET_DIR, relative_path, file_name)
-					print(f'Reading file -> {json_file}')
-					if os.path.exists(json_file):
-						print("\t\t\tExist!")
+					
+				json_file = os.path.join(self.DATASET_DIR, relative_path, file_name)
+				# print(f'Reading file -> {json_file}')
+				if os.path.exists(json_file):
+					# print("\t\t\tExist!")
+					paper = json.load(open(json_file, 'rb'))
+					print(list(paper.keys()))
 
 			# file_name = df.iloc[0]['file_names']
 			# relative_path = df.iloc[0]['relative_paths']

@@ -74,7 +74,7 @@ class DBHandler():
 
 	def _get_title(self, paper_meta):
 		"""Returns title from paper metadata"""
-		pass
+		return paper_meta['title']
 
 	def load_data_as_df(self, index_file_name):
 		if os.path.exists(os.path.join(self.DATA_DIR, index_file_name)):
@@ -90,6 +90,7 @@ class DBHandler():
 				paper = json.load(open(json_file, 'rb'))
 				
 				title = self._get_title(paper['metadata'])
+				print(title)
 				authors = self._get_authors(paper['metadata'])
 				print(authors)
 				# pprint(j.keys())

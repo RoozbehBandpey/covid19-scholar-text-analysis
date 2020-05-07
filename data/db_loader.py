@@ -88,7 +88,7 @@ class DBHandler():
 		return full_text
 
 
-	def load_data_as_df(self, index_file_name):
+	def load_data_to_db(self, index_file_name):
 		if os.path.exists(os.path.join(self.DATA_DIR, index_file_name)):
 			df = pd.read_csv(os.path.join(self.DATA_DIR, index_file_name))
 			df.drop(['Unnamed: 0'], axis=1, inplace=True)
@@ -104,28 +104,18 @@ class DBHandler():
 				if os.path.exists(json_file):
 					# print("\t\t\tExist!")
 					paper = json.load(open(json_file, 'rb'))
-					print(list(paper.keys()))
+					title = self._get_title(paper['metadata'])
+					authors = self._get_authors(paper['metadata'])
+					body_text = self._get_text(paper['body_text'])
+					if 'pmc_json' in json_file:
+						abstract_text = self._get_text(paper['abstract'])
+					else:
+						abstract_text = self._get_text(paper['abstract'])
 
-			# file_name = df.iloc[0]['file_names']
-			# relative_path = df.iloc[0]['relative_paths']
-			# if relative_path[0] == '\\':
-			# 	relative_path = relative_path[1:]
-			# json_file =os.path.join(self.DATASET_DIR, relative_path, file_name)
-			# print(f'Reading file -> {json_file}')
-			# if os.path.exists(json_file):
-			# 	paper = json.load(open(json_file, 'rb'))
-				
-			# 	title = self._get_title(paper['metadata'])
-			# 	print(title)
-			# 	authors = self._get_authors(paper['metadata'])
-			# 	print(authors)
-			# 	abstract_text = self._get_text(paper['abstract'])
-			# 	print(abstract_text)
-			# 	body_text = self._get_text(paper['body_text'])
-			# 	print(body_text)
-			# 	# pprint(j.keys())
-			# else:
-			# 	print("[ERROR] requested file does not exist!")
+				#TODO Inser into db
+
+				else:
+					print("[ERROR] requested file does not exist!")
 
 		else:
 			print("[ERROR] Index file does not exist!")
@@ -133,4 +123,4 @@ class DBHandler():
 
 if __name__ == "__main__":
 	db = DBHandler()
-	db.load_data_as_df('files_index.csv')
+	db.load_data_to_db('files_index.csv')

@@ -46,6 +46,35 @@ class DBHandler():
 		except Exception as e:
 			print(f'[ERROR] Could not connect! -> {e}')
 
+	def __normalize_space(self, text):
+		return " ".join(text.split())
+
+
+	def _get_authors(self, paper_meta):
+		"""Returns authors list from paper metadata"""
+		authors = []
+		for author in paper_meta['authors']:
+			if author['first'] != '':
+				first = author['first']
+			else:
+				first = ''
+			if len(author['middle']) != 0:
+				middle_name = ''
+				for m in author['middle']:
+					middle_name += m
+			else:
+				middle_name = ''
+			if author['last'] != '':
+				last = author['last']
+			else:
+				last = ''
+
+			authors.append(self.__normalize_space(f'{first} {middle_name} {last}'))
+		return authors
+
+	def _get_title(self, paper_meta):
+		"""Returns title from paper metadata"""
+		pass
 
 	def load_data_as_df(self, index_file_name):
 		if os.path.exists(os.path.join(self.DATA_DIR, index_file_name)):
@@ -58,9 +87,12 @@ class DBHandler():
 			json_file =os.path.join(self.DATASET_DIR, relative_path, file_name)
 			print(f'Reading file -> {json_file}')
 			if os.path.exists(json_file):
-				j = json.load(open(json_file, 'rb'))
-				print()
-				pprint(j.keys())
+				paper = json.load(open(json_file, 'rb'))
+				
+				title = self._get_title(paper['metadata'])
+				authors = self._get_authors(paper['metadata'])
+				print(authors)
+				# pprint(j.keys())
 			else:
 				print("[ERROR] requested file does not exist!")
 

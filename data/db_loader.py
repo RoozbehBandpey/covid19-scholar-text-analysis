@@ -76,6 +76,18 @@ class DBHandler():
 		"""Returns title from paper metadata"""
 		return paper_meta['title']
 
+	def _get_abs_text(self, abstract_meta):
+		"""Returns abstract text from paper abstract metadata"""
+		abstract_text = ''
+		for text in abstract_meta:
+			abstract_text += text['text']+'\n\n'
+		
+		if abstract_text[-1] == '\n':
+			abstract_text = abstract_text[:-2]
+
+		return abstract_text
+
+
 	def load_data_as_df(self, index_file_name):
 		if os.path.exists(os.path.join(self.DATA_DIR, index_file_name)):
 			df = pd.read_csv(os.path.join(self.DATA_DIR, index_file_name))
@@ -93,6 +105,8 @@ class DBHandler():
 				print(title)
 				authors = self._get_authors(paper['metadata'])
 				print(authors)
+				abstract_text = self._get_abs_text(paper['abstract'])
+				print(abstract_text)
 				# pprint(j.keys())
 			else:
 				print("[ERROR] requested file does not exist!")

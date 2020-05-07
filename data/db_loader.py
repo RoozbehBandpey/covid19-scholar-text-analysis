@@ -22,7 +22,8 @@ DEBUG = True
 
 class DBHandler():
 	def __init__(self, username=None, password=None, database_name=''):
-		self.DATA_DIR = os.path.join(os.getcwd(), r'data')
+		self.DATA_DIR = os.path.join(os.getcwd(), 'data')
+		self.DATASET_DIR = os.path.join(self.DATA_DIR, 'CORD-19-research-challenge')
 			#for local dev gets from environment variables
 		if DEBUG:
 			if os.environ.get('SQL_CONNSTR') is None:
@@ -49,22 +50,19 @@ class DBHandler():
 	def load_data_as_df(self, index_file_name):
 		if os.path.exists(os.path.join(self.DATA_DIR, index_file_name)):
 			df = pd.read_csv(os.path.join(self.DATA_DIR, index_file_name))
-			# for index, row in df.iterrows():
-			# 	print(row)
 			df.drop(['Unnamed: 0'], axis=1, inplace=True)
 			file_name = df.iloc[0]['file_names']
 			relative_path = df.iloc[0]['relative_paths']
-			file_name = Path(file_name)
-			relative_path = Path(relative_path)
-			self.DATA_DIR = Path(self.DATA_DIR)
-			print(relative_path, file_name)
-			print(self.DATA_DIR)
-			print(os.path.join(self.DATA_DIR, relative_path, file_name))
-			# json_file = self.DATA_DIR + '/' + relative_path + '/' + file_name
-			# j = json.load(open(json_file, 'rb'))
-			# pprint(j)
-			# file_path = os.path.join(relative_path, file_name)
-			# print(os.path.join(self.DATA_DIR, file_path))
+			if relative_path[0] == '\\':
+				relative_path = relative_path[1:]
+			json_file =os.path.join(self.DATASET_DIR, relative_path, file_name)
+			print(f'Reading file -> {json_file}')
+			if os.path.exists(json_file):
+				j = json.load(open(json_file, 'rb'))
+				print()
+				pprint(j.keys())
+			else:
+				print("[ERROR] requested file does not exist!")
 
 		else:
 			print("[ERROR] Index file does not exist!")

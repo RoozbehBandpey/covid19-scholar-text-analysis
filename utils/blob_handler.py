@@ -48,9 +48,16 @@ class BlobHandler(object):
 				print(item)
 		#get_container_client
 
+	def container_exists(self, container_name):
+		self.list_containers(show=False)
+		container_names = [container['name'] for container in self.containers]
+		if container_name in container_names:
+			return True
+		else:
+			return False
 
 
 if __name__ == "__main__":
 	blob = BlobHandler()
 	blob.authenticate_with_connstr()
-	blob.list_containers()
+	blob.container_exists('bla')

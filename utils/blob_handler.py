@@ -1,5 +1,6 @@
 import os
 import uuid
+import time
 from load_env import append_vars
 import azure.storage.blob
 from azure.storage.blob import BlobServiceClient, ContainerClient
@@ -79,7 +80,29 @@ class BlobHandler(object):
 			except Exception as e:
 				print(f"[ERROR] -> {e}")
 
+	def copy_blob(self, source_blob, target_path, target_file_name):
+		#TODO need to be tested because my baby wants to cuddle
+		status = None
+		copied_blob = self.blob_service_client.get_blob_client(target_path, target_file_name)
+		# Copy started
+		copied_blob.start_copy_from_url(source_blob)
+		for i in range(10):
+			props = copied_blob.get_blob_properties()
+			status = props.copy.status
+			print("Copy status: " + status)
+			if status == "success":
+				# Copy finished
+				break
+			time.sleep(10)
 
+		if status != "success":
+			# if not finished after 100s, cancel the operation
+			props = copied_blob.get_blob_properties()
+			print(props.copy.status)
+			copy_id = props.copy.id
+			copied_blob.abort_copy(copy_id)
+			props = copied_blob.get_blob_properties()
+			print(props.copy.status)
 
 
 if __name__ == "__main__":

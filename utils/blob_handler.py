@@ -4,13 +4,6 @@ from load_env import append_vars
 import azure.storage.blob
 from azure.storage.blob import BlobServiceClient, ContainerClient
 
-try:
-	print("Azure Blob storage v12 - Python quickstart sample")
-	# Quick start code goes here
-except Exception as ex:
-	print('Exception:')
-	print(ex)
-
 DEBUG = True
 
 class BlobHandler(object):
@@ -55,9 +48,22 @@ class BlobHandler(object):
 			return True
 		else:
 			return False
+	
+	def get_container_client(self, container_name):
+		if self.container_exists(container_name):
+			try:
+				self.container_client = self.blob_service_client.get_container_client(container_name)
+				print(self.container_client.get_container_properties())
+			except Exception as e:
+				print(f"[ERROR] -> {e}")
+
+		else:
+			print(f"[ERROR] container {container_name} does not exist!")
+
 
 
 if __name__ == "__main__":
 	blob = BlobHandler()
 	blob.authenticate_with_connstr()
-	blob.container_exists('bla')
+	blob.get_container_client('training-lake-container')
+	print(dir(blob.container_client))

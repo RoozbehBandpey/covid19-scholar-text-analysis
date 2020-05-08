@@ -2,7 +2,7 @@ import os
 import uuid
 from load_env import append_vars
 import azure.storage.blob
-from azure.storage.blob import BlobServiceClient
+from azure.storage.blob import BlobServiceClient, ContainerClient
 
 try:
 	print("Azure Blob storage v12 - Python quickstart sample")
@@ -37,12 +37,20 @@ class BlobHandler(object):
 	def authenticate_with_connstr(self):
 		try:
 			self.blob_service_client = BlobServiceClient.from_connection_string(self._connection_string)
-			print(f"Successfully connected to -> {self.blob_service_client.account_name}")
+			print(f"Successfully connected to blob storage [{self.blob_service_client.account_name}]")
 		except Exception as e:
 			print(f"[ERROR] -> {e}")
+
+	def list_containers(self, show=True):
+		self.containers = list(self.blob_service_client.list_containers())
+		if show:
+			for item in self.containers:
+				print(item)
+		#get_container_client
 
 
 
 if __name__ == "__main__":
 	blob = BlobHandler()
 	blob.authenticate_with_connstr()
+	blob.list_containers()

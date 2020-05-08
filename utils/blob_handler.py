@@ -4,7 +4,9 @@ from load_env import append_vars
 import azure.storage.blob
 from azure.storage.blob import BlobServiceClient, ContainerClient
 
+
 DEBUG = True
+
 
 class BlobHandler(object):
 	def __init__(self):
@@ -27,6 +29,7 @@ class BlobHandler(object):
 		self._active_directory_application_secret = os.getenv("ACTIVE_DIRECTORY_APPLICATION_SECRET")
 		self._active_directory_tenant_id = os.getenv("ACTIVE_DIRECTORY_TENANT_ID")
 
+
 	def authenticate_with_connstr(self):
 		try:
 			self.blob_service_client = BlobServiceClient.from_connection_string(self._connection_string)
@@ -34,12 +37,14 @@ class BlobHandler(object):
 		except Exception as e:
 			print(f"[ERROR] -> {e}")
 
+
 	def list_containers(self, show=True):
 		self.containers = list(self.blob_service_client.list_containers())
 		if show:
 			for item in self.containers:
 				print(item)
 		#get_container_client
+
 
 	def container_exists(self, container_name):
 		self.list_containers(show=False)
@@ -49,16 +54,31 @@ class BlobHandler(object):
 		else:
 			return False
 	
+
 	def get_container_client(self, container_name):
 		if self.container_exists(container_name):
 			try:
 				self.container_client = self.blob_service_client.get_container_client(container_name)
-				print(self.container_client.get_container_properties())
+				# print(self.container_client.get_container_properties())
+				return self.container_client
+			except Exception as e:
+				print(f"[ERROR] -> {e}")
+				return None
+		else:
+			print(f"[ERROR] container {container_name} does not exist!")
+			return None
+
+
+	def create_container(self, container_name):
+		if self.container_exists(container_name):
+			print(f"[ERROR] container {container_name} Already exists in target Blob storage!")
+		else:
+			try:
+				self.container_client = self.blob_service_client.get_container_client(container_name)
+				self.container_client.create_container()
 			except Exception as e:
 				print(f"[ERROR] -> {e}")
 
-		else:
-			print(f"[ERROR] container {container_name} does not exist!")
 
 
 

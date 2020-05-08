@@ -16,7 +16,7 @@ DEBUG = True
 class BlobHandler(object):
 	def __init__(self):
 		"""Connects to blob storage and contrains typical blob actions e.g., read, write, list, copy, etc.,"""
-		print(f"You are using Azure Storage SDK version {azure.storage.blob.version}")
+		print(f"You are using Azure Storage SDK version {azure.storage.blob.__version__}")
 		if DEBUG:
 			if os.environ.get('AZURE_STORAGE_CONNECTION_STRING') is None:
 				append_vars(os.path.join(os.path.dirname(
@@ -34,7 +34,15 @@ class BlobHandler(object):
 		self._active_directory_application_secret = os.getenv("ACTIVE_DIRECTORY_APPLICATION_SECRET")
 		self._active_directory_tenant_id = os.getenv("ACTIVE_DIRECTORY_TENANT_ID")
 
+	def authenticate_with_connstr(self):
+		try:
+			self.blob_service_client = BlobServiceClient.from_connection_string(self._connection_string)
+			print(f"Successfully connected to -> {self.blob_service_client.account_name}")
+		except Exception as e:
+			print(f"[ERROR] -> {e}")
+
 
 
 if __name__ == "__main__":
 	blob = BlobHandler()
+	blob.authenticate_with_connstr()

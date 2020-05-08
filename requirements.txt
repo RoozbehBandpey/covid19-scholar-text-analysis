@@ -1,2 +1,2 @@
 azure-functions
-azure-storage-blob
+azure-storage-blob=12.3.1

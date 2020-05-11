@@ -5,6 +5,7 @@ import json
 import sys
 import unittest
 import azure.functions as func
+from . import 
 
 def test_input_stream():
 	test_file_name = 'test.json'

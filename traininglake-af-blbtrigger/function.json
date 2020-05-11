@@ -3,7 +3,7 @@
   "disabled": false,
   "bindings": [
     {
-      "name": "myblob",
+      "name": "incommingblob",
       "type": "blobTrigger",
       "direction": "in",
       "path": "training-lake-container/CORD19",

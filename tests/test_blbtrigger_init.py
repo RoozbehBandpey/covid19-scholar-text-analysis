@@ -5,8 +5,7 @@ import json
 import sys
 import unittest
 import azure.functions as func
-# import traininglake_af_blbtrigger
-from traininglake_af_blbtrigger import main
+import traininglake_af_blbtrigger
 
 class TestFunction(unittest.TestCase):
 	def test_input_stream(self):
@@ -15,8 +14,7 @@ class TestFunction(unittest.TestCase):
 		bytes_stream = func.InputStream
 		bytes_stream.name = test_file_name
 		bytes_stream.length = sys.getsizeof(test_data)
-		# length = traininglake_af_blbtrigger.main(bytes_stream)
-		length = main(bytes_stream)
+		length = traininglake_af_blbtrigger.main(bytes_stream)
 		self.assertEqual(length, sys.getsizeof(test_data))
 
 

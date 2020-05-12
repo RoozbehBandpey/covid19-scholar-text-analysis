@@ -3,6 +3,7 @@ from extractor import Extractor
 
 
 
-
-db = DBHandler()
-data = DataHelper()
+class ETL():
+	def __init__(self):
+		self.loader_obj = Loader()
+		self.extractor_obj = Extractor()

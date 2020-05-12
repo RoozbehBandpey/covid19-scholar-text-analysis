@@ -20,7 +20,7 @@ from utils.load_env import append_vars
 DEBUG = True
 
 
-class DBHandler():
+class Loader():
 	def __init__(self, username=None, password=None, database_name=''):
 		self.DATA_DIR = os.path.join(os.getcwd(), 'data')
 		self.DATASET_DIR = os.path.join(self.DATA_DIR, 'CORD-19-research-challenge')

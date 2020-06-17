@@ -137,3 +137,8 @@ CORD-19-research-challenge/
 #Local settings
 local.settings.json
 .python_packages
+
+
+
+#AML Config
+*config.json

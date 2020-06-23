@@ -28,7 +28,7 @@ jobs:
       scriptType: bash
       inlineScript: |
         set -ex
-        cd training_lake_db/schema
+        cd data/training_lake_db/schema
 
         python3.7 deploy_schema.py \
           --db_server "$(sqlServer)" \

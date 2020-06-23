@@ -163,7 +163,7 @@ def main():
 
 	dbusermanager = DBUserManager(db_name=db_name, db_server=db_server, username=db_user, password=db_pass)
 
-	username = 'mdbwriter'
+	username = 'writer'
 	user_rights = ['GRANT SELECT ON SCHEMA::dbo', 'GRANT INSERT ON SCHEMA::dbo']
 	
 	if len(dbusermanager.get_login_detail(username)) == 0:
@@ -178,8 +178,8 @@ def main():
 			workspace = secretmanager.ws
 			secretmanager.get_keyvault()
 			_logger.info(f"Adding login password as "
-                    f"secret metricsdb-{username} to keyvaults of workspace {workspace.name}")
-			secretmanager.set_secret(f"metricsdb-{login}", password)
+                    f"secret traininglakedb-{username} to keyvaults of workspace {workspace.name}")
+			secretmanager.set_secret(f"traininglakedb-{login}", password)
 	else:
 		_logger.error(f"User with name {username} already exists!")
 

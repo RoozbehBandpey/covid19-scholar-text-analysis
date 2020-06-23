@@ -177,9 +177,9 @@ def run_for_all_workspaces():
 		# Delete secret won't work due to permission!
 		#TODO: test it on your own subscription
 		# secretmanager.drop_secret('metricsdb-dataadmin')
-		secretmanager.set_secret(f"metricsdb-{username}", password)
+		secretmanager.set_secret(f"traininglakedb-{username}", password)
 		_logger.info(f"Adding login password as "
-                    f"secret metricsdb-{username} to keyvaults of workspace {workspace.name}")
+                    f"secret traininglakedb-{username} to keyvaults of workspace {workspace.name}")
 
 
 if __name__ == "__main__":

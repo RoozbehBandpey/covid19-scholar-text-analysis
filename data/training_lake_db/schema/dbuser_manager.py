@@ -150,16 +150,7 @@ class SecretManager():
 
 def run_for_all_workspaces():
 	workspace_config_files = [
-            'atpdeep-cv1-aml-prd-config.json',
-            'atpdeep-blockage-aml-prd-config.json',
-            'atpdeep-cv2-aml-prd-config.json',
-            'atpdeep-lidar-aml-prd-config.json',
-            'atpdeep-monitoring-aml-prd-config.json',
-            'atpdeep-radar-aml-prd-config.json',
-            'atpdeep-tl-aml-prd-config.json',
-            'atpdeep-ts-aml-prd-config.json',
-            'atpdeep-unittests-aml-prd-config.json',
-            'atpdeep-vru-aml-prd-config.json'
+            'config.json'
         ]
 
 	dbmanager = DBUserManager()

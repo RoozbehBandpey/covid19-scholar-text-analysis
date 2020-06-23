@@ -1,0 +1,18 @@
+# Deployment of schema, credentials and secrets for the metrics
+name: deploy_metricsdb_schema
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - metrics/deployment_pipeline/
+
+stages:
+- stage: dev
+  jobs:
+  - template: deploy_traininglakedb_schema_template.yml
+    parameters:
+      environmentVariables: azureml-dev
+      serviceConnection: machine-learning-pipeline

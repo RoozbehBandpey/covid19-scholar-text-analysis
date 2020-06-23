@@ -1,0 +1,40 @@
+parameters:
+- name: environmentVariables
+  type: string
+- name: serviceConnection
+  type: string
+
+jobs:
+- job: deploy_metricsdb_schema
+  variables:
+  - group: ${{parameters.environmentVariables}}
+  - group: azureml-dev
+
+  pool:
+    vmImage: ubuntu-16.04
+
+  timeoutInMinutes: 60
+
+  steps:
+  - bash: |
+      python3.7 -m pip install --upgrade sqlalchemy pyodbc azureml-sdk
+    displayName: Install python packages sqlalchemy, pyodbc and azureml-sdk
+
+  - task: AzureCLI@2
+    displayName: Deploy metricsdb schema, create new users
+    inputs:
+      azureSubscription: ${{ parameters.serviceConnection }}
+      scriptLocation: inlineScript
+      scriptType: bash
+      inlineScript: |
+        set -ex
+        cd metrics/schema
+
+        python3.7 deploy_schema.py \
+          --db_server "$(sqlServer)" \
+          --db_name "$(sqlDBName)" \
+          --db_user "$(sqlServerAdminUsername)" \
+          --db_pass "$(sqlServerAdminPass)" \
+          --subscription_id "$(subscriptionId)" \
+          --aml_resource_group "$(amlResourceGroup)" \
+          --if_exist "skip"

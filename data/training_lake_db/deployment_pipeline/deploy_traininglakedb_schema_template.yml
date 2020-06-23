@@ -5,7 +5,7 @@ parameters:
   type: string
 
 jobs:
-- job: deploy_metricsdb_schema
+- job: deploy_traininglakedb_schema
   variables:
   - group: ${{parameters.environmentVariables}}
   - group: azureml-dev
@@ -21,18 +21,18 @@ jobs:
     displayName: Install python packages sqlalchemy, pyodbc and azureml-sdk
 
   - task: AzureCLI@2
-    displayName: Deploy metricsdb schema, create new users
+    displayName: Deploy traininglakedb schema, create new users
     inputs:
       azureSubscription: ${{ parameters.serviceConnection }}
       scriptLocation: inlineScript
       scriptType: bash
       inlineScript: |
         set -ex
-        cd metrics/schema
+        cd training_lake_db/schema
 
         python3.7 deploy_schema.py \
           --db_server "$(sqlServer)" \
-          --db_name "$(sqlDBName)" \
+          --db_name "$(sqlDBTraininglake)" \
           --db_user "$(sqlServerAdminUsername)" \
           --db_pass "$(sqlServerAdminPass)" \
           --subscription_id "$(subscriptionId)" \

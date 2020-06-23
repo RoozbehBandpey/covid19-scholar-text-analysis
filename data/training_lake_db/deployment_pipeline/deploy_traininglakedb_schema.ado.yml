@@ -1,5 +1,5 @@
 # Deployment of schema, credentials and secrets for the metrics
-name: deploy_metricsdb_schema
+name: deploy_traininglakedb_schema
 
 trigger:
   branches:

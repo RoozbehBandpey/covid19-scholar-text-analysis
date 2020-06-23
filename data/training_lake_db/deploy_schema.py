@@ -7,7 +7,7 @@ from sqlalchemy import select
 from dbuser_manager import DBUserManager, SecretManager
 from sqlalchemy import Table
 from pprint import pprint
-from metricsdb import Detail, Experiment, Image, Metric, Run, Tag, Workspace, Model
+from training_lake_db import Detail, Model
 import argparse
 import logging
 import urllib
@@ -29,7 +29,7 @@ _logger = logging.getLogger(__name__)
 
 class SchemaManager():
 	"""
-   	DB schema manager for 
+   	DB schema manager for deployment of database schema through ADO pipeline
 	"""
 
 	def __init__(self, db_name=None, db_server=None, driver="{ODBC Driver 17 for SQL Server}", username=None, password=None):
@@ -187,4 +187,3 @@ def main():
 
 if __name__ == "__main__":
 	main()
-

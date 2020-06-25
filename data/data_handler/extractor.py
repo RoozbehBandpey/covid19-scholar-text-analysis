@@ -64,3 +64,8 @@ class Extractor():
 			full_text = full_text[:-2]
 
 		return full_text
+
+
+
+if __name__ == "__main__":
+	e = Extractor()

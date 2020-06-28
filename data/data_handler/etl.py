@@ -1,5 +1,5 @@
-# from loader import Loader
-# from extractor import Extractor
+from loader import Loader
+from extractor import Extractor
 import os
 import sys
 from kaggle.api.kaggle_api_extended import KaggleApi
@@ -13,8 +13,8 @@ append_api_vars(os.path.join(os.path.dirname(
 
 class ETL():
 	def __init__(self):
-		# self.loader_obj = Loader()
-		# self.extractor_obj = Extractor()
+		self.loader_obj = Loader()
+		self.extractor_obj = Extractor()
 		pass
 
 

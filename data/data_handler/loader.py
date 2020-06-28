@@ -27,22 +27,22 @@ class Loader():
 			#for local dev gets from environment variables
 		if DEBUG:
 			if os.environ.get('SQL_CONNSTR') is None:
-				append_vars(os.path.join(os.path.dirname(
-					os.path.realpath(__file__)), 'local.settings.json'))
+				append_vars(os.path.join(os.path.dirname(os.path.dirname(
+					os.path.realpath(__file__))), 'local.settings.json'))
 		# Once deployed gets from ADO variable groups
-		self._database_name = os.environ.get('SQL_DATABASE')
-		self._hostname = f"{self._database_name}.database.windows.net"
-		self._username = os.environ.get('SQL_USERNAME')
-		self._password = os.environ.get('SQL_PASSWORD')
-		self._driver = "{ODBC Driver 17 for SQL Server}"
-		self._connection_string = os.environ.get('SQL_CONNSTR')
+		_database_name = os.environ.get('SQL_DATABASE')
+		_db_server = os.environ.get('SQL_SERVER')
+		_username = os.environ.get('SQL_USERNAME')
+		_password = os.environ.get('SQL_PASSWORD')
+		_driver = "{ODBC Driver 17 for SQL Server}"
+		_connection_string = f"""Driver={_driver};Server=tcp:{_db_server},1433;Database={_database_name};Uid={_username};Pwd={_password};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"""
 		# Connect
-		params = urllib.parse.quote_plus(self._connection_string)
+		params = urllib.parse.quote_plus(_connection_string)
 		self.db_engine = create_engine("mssql+pyodbc:///?odbc_connect=%s" % params)
 		self.metadata = MetaData(bind=self.db_engine)
 		try:
 			conn = self.db_engine.connect()
-			print(f'Successfully connected to {self._database_name}, connection is closed- > {conn.closed}')
+			print(f'Successfully connected to {_database_name}, connection is closed- > {conn.closed}')
 		except Exception as e:
 			print(f'[ERROR] Could not connect! -> {e}')
 
@@ -112,7 +112,7 @@ class Loader():
 					else:
 						abstract_text = self._get_text(paper['abstract'])
 
-				#TODO Inser into db
+				#TODO Insert into db
 
 				else:
 					print("[ERROR] requested file does not exist!")
@@ -122,5 +122,5 @@ class Loader():
 
 
 if __name__ == "__main__":
-	db = DBHandler()
+	db = Loader()
 	db.load_data_to_db('files_index.csv')

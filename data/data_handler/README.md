@@ -7,3 +7,4 @@ Responsible for Extract,. Transfer and loading data, designed to be able to hand
 
 [ETL Class](./etl.py)
 download function download dataset from kaggle
+Download kaggle.json from your your profile, place it in the working directory and ```C:\Users\<Your User Name>\.kaggle.```

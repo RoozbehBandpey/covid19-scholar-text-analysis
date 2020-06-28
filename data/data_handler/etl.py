@@ -21,10 +21,10 @@ class ETL():
 	def download(self):
 		api = KaggleApi()
 		api.authenticate()
+		x = api.competition_list_files('titanic')
+		print(x)
 
 
 if __name__ == "__main__":
 	etl = ETL()
 	etl.download()
-	print(os.environ.get('username'))
-	print(os.environ.get('key'))

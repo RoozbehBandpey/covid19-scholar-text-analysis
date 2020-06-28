@@ -142,3 +142,5 @@ local.settings.json
 
 #AML Config
 *config.json
+
+kaggle.json

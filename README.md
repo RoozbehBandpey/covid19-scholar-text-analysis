@@ -13,3 +13,12 @@ Read more on [README](data/README.md)
 ## Tools and Requirements
 
 ### Why Azure Machine Learning?
+
+
+
+
+
+
+#### TODOS:
+
+Download data and push it to blob container

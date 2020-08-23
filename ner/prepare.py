@@ -19,8 +19,7 @@ import random
 from sklearn.model_selection import train_test_split
 import pandas as pd
 from transformers import AutoTokenizer
-import azureml.core
-from azureml.core.authentication import AzureCliAuthentication, MsiAuthenticationpip
+from azureml.core.authentication import AzureCliAuthentication
 from azureml.core import Workspace, Datastore
 
 

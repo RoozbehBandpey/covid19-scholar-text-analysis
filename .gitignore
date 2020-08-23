@@ -130,6 +130,7 @@ dmypy.json
 
 
 CORD-19-research-challenge/
+data/ner/*
 
 
 #IDEs
@@ -144,3 +145,8 @@ local.settings.json
 *config.json
 
 kaggle.json
+
+
+.terraform
+
+

@@ -1,21 +1,38 @@
 name: bert
 channels:
   - pytorch
-  - conda-forge
   - anaconda
+  - conda-forge
   - defaults
 dependencies:
   - autopep8=1.5.4=py_0
   - blas=1.0=mkl
+  - boto3=1.14.47=pyh9f0ad1d_0
+  - botocore=1.17.47=pyh9f0ad1d_0
   - brotlipy=0.7.0=py37he774522_1000
-  - ca-certificates=2020.6.20=hecda079_0
-  - certifi=2020.6.20=py37hc8dfbb8_0
+  - ca-certificates=2020.6.24=0
+  - certifi=2020.6.20=py37_0
   - cffi=1.14.0=py37h7a1dbc1_0
   - chardet=3.0.4=py37_1003
+  - click=7.1.2=pyh9f0ad1d_0
   - cryptography=2.9.2=py37h7a1dbc1_0
   - cudatoolkit=10.2.89=h74a9793_1
+  - cycler=0.10.0=py37_0
+  - docutils=0.15.2=py37_0
+  - freetype=2.10.2=hd328e21_0
+  - icc_rt=2019.0.0=h0cc432a_1
+  - icu=58.2=ha925a31_3
   - idna=2.10=py_0
   - intel-openmp=2020.1=216
+  - jmespath=0.10.0=pyh9f0ad1d_0
+  - joblib=0.16.0=py_0
+  - jpeg=9b=hb83a4c4_2
+  - kiwisolver=1.2.0=py37h74a9793_0
+  - libpng=1.6.37=h2a8f88b_0
+  - libtiff=4.1.0=h56a325e_1
+  - lz4-c=1.9.2=h62dcd97_1
+  - matplotlib=3.3.1=0
+  - matplotlib-base=3.3.1=py37hba9282a_0
   - mkl=2020.1=216
   - mkl-service=2.3.0=py37hb782905_0
   - mkl_fft=1.1.0=py37h45dec08_0
@@ -23,20 +40,37 @@ dependencies:
   - ninja=1.10.0=py37h7ef1ec2_0
   - numpy=1.19.1=py37h5510c5b_0
   - numpy-base=1.19.1=py37ha3acd2a_0
+  - olefile=0.46=py37_0
   - openssl=1.1.1g=he774522_1
+  - pandas=1.1.0=py37ha925a31_0
+  - pillow=7.2.0=py37hcc1f983_0
   - pip=20.2.2=py37_0
   - pycodestyle=2.6.0=py_0
   - pycparser=2.20=py_2
   - pyopenssl=19.1.0=py_1
+  - pyparsing=2.4.7=py_0
+  - pyqt=5.9.2=py37h6538335_2
   - pysocks=1.7.1=py37_1
   - python=3.7.7=h81c818b_4
+  - python-dateutil=2.8.1=py_0
   - python_abi=3.7=1_cp37m
   - pytorch=1.6.0=py3.7_cuda102_cudnn7_0
+  - pytz=2020.1=py_0
+  - qt=5.9.7=vc14h73c81de_0
+  - regex=2020.7.14=py37h4ab8f01_0
   - requests=2.24.0=py_0
+  - s3transfer=0.3.3=py37hc8dfbb8_1
+  - sacremoses=0.0.43=pyh9f0ad1d_0
+  - scikit-learn=0.23.1=py37h25d0782_0
+  - scipy=1.5.2=py37h9439919_0
   - setuptools=49.6.0=py37_0
+  - sip=4.19.8=py37h6538335_0
   - six=1.15.0=py_0
   - sqlite=3.32.3=h2a8f88b_0
+  - threadpoolctl=2.1.0=pyh5ca1d4c_0
+  - tk=8.6.10=he774522_0
   - toml=0.10.1=py_0
+  - tornado=6.0.4=py37he774522_1
   - tqdm=4.48.2=pyh9f0ad1d_0
   - urllib3=1.25.10=py_0
   - vc=14.1=h0510ff6_4
@@ -44,6 +78,14 @@ dependencies:
   - wheel=0.34.2=py37_0
   - win_inet_pton=1.1.0=py37_0
   - wincertstore=0.2=py37_0
+  - xz=5.2.5=h62dcd97_0
   - zlib=1.2.11=h62dcd97_4
+  - zstd=1.4.5=h04227a9_0
+  - pip:
+    - filelock==3.0.12
+    - packaging==20.4
+    - sentencepiece==0.1.91
+    - tokenizers==0.8.1rc2
+    - transformers==3.0.2
 prefix: C:\Users\r.bandpey\.conda\envs\bert
 

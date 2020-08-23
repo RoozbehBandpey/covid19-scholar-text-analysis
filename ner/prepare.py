@@ -18,22 +18,21 @@ from tqdm import tqdm
 import random
 from sklearn.model_selection import train_test_split
 import pandas as pd
-from transformers import (
-    MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING,
-    AutoConfig,
-    AutoModelForTokenClassification,
-    AutoTokenizer,
-)
+from transformers import AutoTokenizer
+import azureml.core
+from azureml.core.authentication import AzureCliAuthentication, MsiAuthenticationpip
+from azureml.core import Workspace, Datastore
 
 
+ws = Workspace.from_config(
+    auth=AzureCliAuthentication(),
+    path=os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+                'config.json'
+        )
+    )
 
-
-supported_models = [
-    # list(x.pretrained_config_archive_map)
-    list(x.model_type)
-    for x in MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING
-]
-supported_models = sorted([x for y in supported_models for x in y])
+print(f'Workspace: {ws.name}')
 
 MAX_SEQ_LEN = 512
 
@@ -214,23 +213,19 @@ class TokenClassificationProcessor:
                 Labels are only returned when train_mode is True.
         """
         batch = tuple(t.to(device) for t in batch)
-        if model_name in supported_models:
-            if train_mode:
-                inputs = {
-                    "input_ids": batch[0],
-                    "attention_mask": batch[1],
-                    "labels": batch[3],
-                }
-            else:
-                inputs = {"input_ids": batch[0], "attention_mask": batch[1]}
 
-            # distilbert doesn't support segment ids
-            if model_name.split("-")[0] not in ["distilbert"]:
-                inputs["token_type_ids"] = batch[2]
-
-            return inputs
+        if train_mode:
+            inputs = {
+                "input_ids": batch[0],
+                "attention_mask": batch[1],
+                "labels": batch[3],
+            }
         else:
-            raise ValueError("Model not supported: {}".format(model_name))
+            inputs = {"input_ids": batch[0], "attention_mask": batch[1]}
+        # distilbert doesn't support segment ids
+        if model_name.split("-")[0] not in ["distilbert"]:
+            inputs["token_type_ids"] = batch[2]
+        return inputs
 
     @staticmethod
     def create_label_map(label_lists, trailing_piece_tag="X"):
@@ -450,8 +445,8 @@ def load():
 
 	# model configurations
 	NUM_TRAIN_EPOCHS = 5
-	# MODEL_NAME = "bert-base-cased"
-	MODEL_NAME = "distilbert"
+	MODEL_NAME = "bert-base-cased"
+	# MODEL_NAME = "distilbert"
 	DO_LOWER_CASE = False
 	MAX_SEQ_LENGTH = 200
 	TRAILING_PIECE_TAG = "X"
@@ -499,25 +494,28 @@ def load():
 		label_map=label_map,
 		trailing_piece_tag=TRAILING_PIECE_TAG,
 	)
-	train_dataloader = dataloader_from_dataset(
-		train_dataset, batch_size=BATCH_SIZE, num_gpus=NUM_GPUS, shuffle=True, distributed=False
-	)
 
-	test_dataset = processor.preprocess(
-		text=test_sentence_list,
-		max_len=MAX_SEQ_LENGTH,
-		labels=test_labels_list,
-		label_map=label_map,
-		trailing_piece_tag=TRAILING_PIECE_TAG,
-	)
-	test_dataloader = dataloader_from_dataset(
-		test_dataset, batch_size=BATCH_SIZE, num_gpus=NUM_GPUS, shuffle=False, distributed=False
-	)
+	# train_data_loader = DataLoader(train_dataset)
+
+	torch.save(train_dataset, os.path.join(DATA_PATH, 'train.pt'))
+
+	# train_dataloader = dataloader_from_dataset(
+	# 	train_dataset, batch_size=BATCH_SIZE, num_gpus=NUM_GPUS, shuffle=True, distributed=False
+	# )
+
+	# test_dataset = processor.preprocess(
+	# 	text=test_sentence_list,
+	# 	max_len=MAX_SEQ_LENGTH,
+	# 	labels=test_labels_list,
+	# 	label_map=label_map,
+	# 	trailing_piece_tag=TRAILING_PIECE_TAG,
+	# )
+	# test_dataloader = dataloader_from_dataset(
+	# 	test_dataset, batch_size=BATCH_SIZE, num_gpus=NUM_GPUS, shuffle=False, distributed=False
+	# )
+
+	# print(test_dataset)
 
 
 if __name__ == "__main__":
 	load()
-	# for x in MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING:
-	# 	# print(x)
-	# 	# print(dir(x))
-	# 	print(x.model_type)

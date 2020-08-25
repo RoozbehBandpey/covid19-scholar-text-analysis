@@ -9,6 +9,7 @@ import torch
 import os
 from torch.utils.data import TensorDataset
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
+from torch.utils.data.dataset import Dataset
 from torch.utils.data.distributed import DistributedSampler
 import requests
 from collections import Iterable
@@ -20,7 +21,7 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 from transformers import AutoTokenizer
 from azureml.core.authentication import AzureCliAuthentication
-from azureml.core import Workspace, Datastore
+from azureml.core import Workspace, Datastore, Dataset
 
 
 ws = Workspace.from_config(
@@ -495,25 +496,65 @@ def load():
 	)
 
 	# train_data_loader = DataLoader(train_dataset)
+	test_dataset = processor.preprocess(
+		text=test_sentence_list,
+		max_len=MAX_SEQ_LENGTH,
+		labels=test_labels_list,
+		label_map=label_map,
+		trailing_piece_tag=TRAILING_PIECE_TAG,
+	)
 
 	torch.save(train_dataset, os.path.join(DATA_PATH, 'train.pt'))
+	torch.save(test_dataset, os.path.join(DATA_PATH, 'test.pt'))
 
-	# train_dataloader = dataloader_from_dataset(
-	# 	train_dataset, batch_size=BATCH_SIZE, num_gpus=NUM_GPUS, shuffle=True, distributed=False
-	# )
+	# Default datastore
+	def_data_store = ws.get_default_datastore()
 
-	# test_dataset = processor.preprocess(
-	# 	text=test_sentence_list,
-	# 	max_len=MAX_SEQ_LENGTH,
-	# 	labels=test_labels_list,
-	# 	label_map=label_map,
-	# 	trailing_piece_tag=TRAILING_PIECE_TAG,
-	# )
-	# test_dataloader = dataloader_from_dataset(
-	# 	test_dataset, batch_size=BATCH_SIZE, num_gpus=NUM_GPUS, shuffle=False, distributed=False
-	# )
+	# Get the blob storage associated with the workspace
+	def_blob_store = Datastore(ws, "workspaceblobstore")
 
-	# print(test_dataset)
+	# Get file storage associated with the workspace
+	def_file_store = Datastore(ws, "workspacefilestore")
+
+	try:
+		def_blob_store.upload_files(
+	    			[os.path.join(DATA_PATH, 'train.pt')], target_path="nerdata", overwrite=True, show_progress=True)
+	except Exception as e:
+		print(f"Failed to upload -> {e}")
+
+	try:
+		def_blob_store.upload_files(
+                    [os.path.join(DATA_PATH, 'test.pt')], target_path="nerdata", overwrite=True, show_progress=True)
+	except Exception as e:
+		print(f"Failed to upload -> {e}")
+
+	train_datastore_paths = [(def_blob_store, 'nerdata/train.pt')]
+	test_datastore_paths = [(def_blob_store, 'nerdata/test.pt')]
+
+	# def_blob_store.upload(src_dir=DATA_PATH, target_path="nerdata", overwrite=True, show_progress=True)
+
+	train_ds = Dataset.File.from_files(path=train_datastore_paths)
+	test_ds = Dataset.File.from_files(path=test_datastore_paths)
+
+	train_ds = train_ds.register(workspace=ws,
+                                  name='ner_bert_train_ds',
+                                  description='Named Entity Recognition with BERT (Training set)',
+                                  create_new_version=False)
+
+	train_ds = test_ds.register(workspace=ws,
+                                  name='ner_bert_test_ds',
+                                  description='Named Entity Recognition with BERT (Testing set)',
+                                  create_new_version=False)
+
+	train_dataloader = dataloader_from_dataset(
+		train_dataset, batch_size=BATCH_SIZE, num_gpus=NUM_GPUS, shuffle=True, distributed=False
+	)
+
+	test_dataloader = dataloader_from_dataset(
+		test_dataset, batch_size=BATCH_SIZE, num_gpus=NUM_GPUS, shuffle=False, distributed=False
+	)
+
+	return (train_dataloader, test_dataloader)
 
 
 if __name__ == "__main__":

@@ -1,13 +1,14 @@
 from prepare import load
 import torch
-from utils import TokenClassificationProcessor, TokenClassifier, Timer
+from utils import TokenClassifier, Timer
 import logging
 import os
+from azureml.core.run import Run
 
 
 logger = logging.getLogger(__name__)
 
-
+run = Run.get_context()
 
 # the data path used to save the downloaded data file
 DATA_PATH = os.path.join(os.getcwd(), 'data', 'ner', 'data')
@@ -46,4 +47,6 @@ with Timer() as t:
         seed=RANDOM_SEED
     )
 
+
+run.log('Training time', t.interval / 3600)
 print("Training time : {:.3f} hrs".format(t.interval / 3600))

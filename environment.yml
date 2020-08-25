@@ -5,6 +5,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
+  - python=3.7.3
   - atomicwrites=1.4.0=pyh9f0ad1d_0
   - attrs=20.1.0=pyh9f0ad1d_0
   - autopep8=1.5.4=py_0
@@ -92,7 +93,9 @@ dependencies:
   - zipp=3.1.0=py_0
   - zlib=1.2.11=h62dcd97_4
   - zstd=1.4.5=h04227a9_0
+  - pip
   - pip:
+    - torch
     - adal==1.2.4
     - applicationinsights==0.11.9
     - argcomplete==1.12.0
@@ -167,6 +170,7 @@ dependencies:
     - dotnetcore2==2.1.14
     - filelock==3.0.12
     - fusepy==3.0.1
+    - future==0.18.2
     - isodate==0.6.0
     - jeepney==0.4.3
     - jinja2==2.11.2

@@ -1,4 +1,10 @@
 from utils import Timer
+from prepare import load
+
+
+train_dataloader, test_dataloader, label_map = load(
+    quick_run=False, data_path=DATA_PATH, cache_path=CACHE_DIR, model_name=MODEL_NAME, num_gpus=NUM_GPUS, random_seed=RANDOM_SEED)
+
 
 
 with Timer() as t:
@@ -10,6 +16,9 @@ with Timer() as t:
 
 print("Prediction time : {:.3f} hrs".format(t.interval / 3600))
 
+
+
+# Get a registered model
 
 true_labels = model.get_true_test_labels(label_map=label_map, dataset=test_dataset)
 

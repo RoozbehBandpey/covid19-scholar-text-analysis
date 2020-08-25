@@ -32,7 +32,7 @@ experiment = Experiment(workspace=ws, name=experiment_name)
 
 
 supported_vms = AmlCompute.supported_vmsizes(workspace=ws)
-print(supported_vms)
+# print(supported_vms)
 
 
 project_folder = './ner'
@@ -40,10 +40,29 @@ project_folder = './ner'
 
 bert_env = Environment("bert_aml_env")
 
-
-
+conda_dep = CondaDependencies()
+conda_dep.add_pip_package("torch")
+conda_dep.add_pip_package("adal")
+conda_dep.add_pip_package("cloudpickle")
+conda_dep.add_pip_package("docker")
+conda_dep.add_pip_package("numpy")
+conda_dep.add_pip_package("scipy")
+conda_dep.add_pip_package("tokenizers")
+conda_dep.add_pip_package("transformers")
+conda_dep.add_pip_package("matplotlib")
+conda_dep.add_pip_package("apex")
+conda_dep.add_pip_package("pandas")
+conda_dep.add_pip_package("pillow")
+conda_dep.add_pip_package("requests")
+conda_dep.add_pip_package("scikit-learn")
+conda_dep.add_pip_package("tqdm")
 bert_env.docker.enabled = True
-bert_env.from_conda_specification('bert', './environment.yml')
+# bert_env.from_conda_specification('bert', './environment.yml')
+# bert_env.from_existing_conda_environment('bert_aml_env', 'bert')
+bert_env.python.conda_dependencies = conda_dep
+
+
+# bert_env.python.conda_dependencies = conda_dep
 
 bert_env.register(ws)
 

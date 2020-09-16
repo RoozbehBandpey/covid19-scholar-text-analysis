@@ -13,6 +13,6 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "azureSearchTFResourceGroup"
+  name     = "azure-search-poc"
   location = "westeurope"
 }

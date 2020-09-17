@@ -12,7 +12,20 @@ provider "azurerm" {
   features {}
 }
 
+variable BASE_NAME {
+	type = string
+	default = "azure-search"
+}
+variable ENV {
+	type = string
+	default = "poc"
+}
+variable LOCATION {
+	type = string
+	default = "westeurope"
+}
+
 resource "azurerm_resource_group" "rg" {
-  name     = "azure-search-poc"
-  location = "westeurope"
+  name     = "${var.BASE_NAME}-rg-${var.ENV}"
+  location = var.LOCATION
 }

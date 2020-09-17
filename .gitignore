@@ -150,3 +150,6 @@ kaggle.json
 .terraform
 
 transformers
+
+*.tfstate
+*.backup

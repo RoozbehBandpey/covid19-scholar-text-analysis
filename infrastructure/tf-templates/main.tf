@@ -14,7 +14,7 @@ provider "azurerm" {
 
 variable BASE_NAME {
 	type = string
-	default = "azure-search"
+	default = "cognitive-search"
 }
 variable ENV {
 	type = string
@@ -50,14 +50,14 @@ variable HOSTING_MODE {
 
 resource "azurerm_resource_group" "rg" {
   	name     = "${var.BASE_NAME}-rg-${var.ENV}"
-  	location = "${var.LOCATION}"
+  	location = var.LOCATION
 }
 
 resource "azurerm_search_service" "search" {
   	name                = "${var.BASE_NAME}-as-${var.ENV}"
-  	resource_group_name = "${azurerm_resource_group.rg.name}"
-  	location            = "${var.LOCATION}"
-  	sku                 = "${var.SKU}"
-  	replica_count       = "${var.REPLICA_COUNT}"
-  	partition_count     = "${var.PARTITION_COUNT}"
+  	resource_group_name = azurerm_resource_group.rg.name
+  	location            = var.LOCATION
+  	sku                 = var.SKU
+  	replica_count       = var.REPLICA_COUNT
+  	partition_count     = var.PARTITION_COUNT
 }

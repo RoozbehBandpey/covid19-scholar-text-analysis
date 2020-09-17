@@ -50,7 +50,7 @@ variable HOSTING_MODE {
 
 resource "azurerm_resource_group" "rg" {
   	name     = "${var.BASE_NAME}-rg-${var.ENV}"
-  	location = var.LOCATION
+  	location = var.LOCATION 
 }
 
 resource "azurerm_search_service" "search" {

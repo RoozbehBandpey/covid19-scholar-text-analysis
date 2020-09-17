@@ -153,3 +153,4 @@ transformers
 
 *.tfstate
 *.backup
+.terraform.tfstate.lock.info

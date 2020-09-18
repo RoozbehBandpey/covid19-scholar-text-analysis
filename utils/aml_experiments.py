@@ -17,7 +17,7 @@ class Extractor():
 			)
 		)
 		print(
-			f"Found workspace {self.ws.name} \n\tat location atpdeep_cv1_prd_ws.location{self.ws.location}\n\t with the id:{self.ws._workspace_id}")
+			f"Found workspace {self.ws.name} \n\tat location {self.ws.location}\n\t with the id:{self.ws._workspace_id}")
 		self.experiments = {}
 
 	def get_experiments(self):
